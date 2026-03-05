@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="stylesheet" href="/index.css" />
+    <link rel="stylesheet" href="/fonts/ym/iconfont.css" />
+    <link rel="stylesheet" href="/fonts/ym-custom/iconfont.css" />
+    <link rel="stylesheet" href="/fonts/ym-diecut/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="/css/print-lock.css" media="print" />
+    <meta name="renderer" content="webkit" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> -->
+    <title><%= title %></title>
+    <link rel="icon" href="/favicon.ico" />
+    <style>
+      .browser-unsupported {
+        position: fixed;
+        inset: 0;
+        background: #f5f7fa;
+        color: #1f2329;
+        z-index: 9999;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'PingFang SC', 'Hiragino Sans GB',
+          'Microsoft YaHei', sans-serif;
+      }
+
+      .browser-unsupported__wrap {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 520px;
+        max-width: 92%;
+        padding: 32px 28px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgb(0 0 0 / 8%);
+        text-align: center;
+        box-sizing: border-box;
+      }
+
+      .browser-unsupported__logo {
+        width: 120px;
+        height: auto;
+        margin-bottom: 16px;
+      }
+
+      .browser-unsupported__title {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+
+      .browser-unsupported__desc {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.7;
+        color: #606266;
+      }
+
+      .browser-unsupported__meta {
+        margin-top: 16px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: #909399;
+        word-break: break-all;
+      }
+
+      .browser-unsupported__actions {
+        margin-top: 18px;
+      }
+
+      .browser-unsupported__btn {
+        display: inline-block;
+        margin: 0 8px 8px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: 1px solid #ffb36b;
+        border: 1px solid rgb(255 123 0 / 35%);
+        background: #fff4ea;
+        background: rgb(255 123 0 / 8%);
+        color: #a84600;
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 1;
+        transition: all 0.15s ease;
+      }
+
+      .browser-unsupported__btn--primary {
+        background: #ff7b00;
+        background: linear-gradient(135deg, #ffb36b 0%, #ff7b00 60%, #ff6a00 100%);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 6px 16px rgb(255 123 0 / 28%);
+      }
+
+      .browser-unsupported__btn:hover {
+        background: rgb(255 123 0 / 12%);
+        border-color: rgb(255 123 0 / 55%);
+      }
+
+      .browser-unsupported__btn--primary:hover {
+        filter: brightness(1.03);
+      }
+
+      .browser-unsupported__btn:active {
+        transform: translateY(1px);
+      }
+
+      .browser-unsupported__btn:focus {
+        outline: none;
+      }
+
+      .browser-unsupported__btn:focus-visible {
+        box-shadow: 0 0 0 3px rgb(255 123 0 / 22%);
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          var htmlRoot = document.getElementById('htmlRoot');
+          var theme = window.localStorage && window.localStorage.getItem('__APP__DARK__MODE__');
+          if (htmlRoot && theme) {
+            htmlRoot.setAttribute('data-theme', theme);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <div id="browserUnsupported" class="browser-unsupported" style="display: none">
+      <div class="browser-unsupported__wrap">
+        <img src="/resource/img/logo.png" class="browser-unsupported__logo" alt="Logo" />
+        <h1 class="browser-unsupported__title">当前浏览器或版本不支持</h1>
+        <p class="browser-unsupported__desc">
+          请使用 Chromium 内核浏览器 <b>108</b> 及以上版本访问（推荐：Chrome / Edge）。
+          <br />
+          当前检测：<span id="browserUnsupportedName">-</span> <span id="browserUnsupportedVersion"></span>
+        </p>
+        <div class="browser-unsupported__actions">
+          <button id="browserUnsupportedOpenEdge" class="browser-unsupported__btn browser-unsupported__btn--primary" type="button">使用 Edge 打开</button>
+          <button id="browserUnsupportedOpenChrome" class="browser-unsupported__btn" type="button">使用 Chrome 打开</button>
+        </div>
+        <div class="browser-unsupported__meta">UA：<span id="browserUnsupportedUA">-</span></div>
+      </div>
+    </div>
+    <div id="app">
+      <div class="app-loading">
+        <div class="app-loading-wrap">
+          <img src="/resource/img/logo.png" class="app-loading-logo" alt="Logo" />
+          <div class="loading">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        function parseMajor(match) {
+          if (!match || !match[1]) return null;
+          var n = parseInt(match[1], 10);
+          return isNaN(n) ? null : n;
+        }
+
+        function getIEVersion(ua) {
+          var msie = ua.match(/MSIE (\d+)/);
+          if (msie) return parseMajor(msie);
+          var trident = ua.match(/Trident\/.*rv:(\d+)/);
+          if (trident) return parseMajor(trident);
+          return null;
+        }
+
+        function getChromiumInfo(ua) {
+          var edge = ua.match(/Edg\/(\d+)/);
+          if (edge) return { name: 'Edge', major: parseMajor(edge) };
+          var chrome = ua.match(/Chrome\/(\d+)/);
+          if (chrome) return { name: 'Chrome', major: parseMajor(chrome) };
+          var chromium = ua.match(/Chromium\/(\d+)/);
+          if (chromium) return { name: 'Chromium', major: parseMajor(chromium) };
+          return null;
+        }
+
+        function setText(el, value) {
+          if (!el) return;
+          if (el.textContent !== undefined) el.textContent = value;
+          else el.innerText = value;
+        }
+
+        var ua = (navigator && navigator.userAgent) || '';
+        var isIE = !!document.documentMode || ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1;
+        var ieVersion = isIE ? getIEVersion(ua) : null;
+        var chromiumInfo = getChromiumInfo(ua);
+
+        var unsupported = false;
+        var currentName = '';
+        var currentVersion = '';
+
+        if (isIE) {
+          unsupported = true;
+          currentName = 'IE';
+          currentVersion = ieVersion ? String(ieVersion) : '';
+        } else if (chromiumInfo && chromiumInfo.major && chromiumInfo.major < 108) {
+          unsupported = true;
+          currentName = chromiumInfo.name;
+          currentVersion = String(chromiumInfo.major);
+        }
+
+        window.__LYDC_BROWSER_UNSUPPORTED__ = unsupported;
+
+        if (!unsupported) return;
+
+        var unsupportedEl = document.getElementById('browserUnsupported');
+        var appEl = document.getElementById('app');
+        if (unsupportedEl) unsupportedEl.style.display = 'block';
+        if (appEl) appEl.style.display = 'none';
+        document.title = '浏览器不支持';
+
+        var nameEl = document.getElementById('browserUnsupportedName');
+        var versionEl = document.getElementById('browserUnsupportedVersion');
+        var uaEl = document.getElementById('browserUnsupportedUA');
+        setText(nameEl, currentName || '-');
+        setText(versionEl, currentVersion ? currentVersion : '');
+        setText(uaEl, ua || '-');
+
+        function clearListeners() {}
+
+        function tryOpenWithFallback(schemeUrl, fallbackUrl) {
+          if (!schemeUrl) {
+            window.location.href = fallbackUrl;
+            return;
+          }
+
+          var opened = false;
+          var timeoutId = null;
+
+          function cleanup() {
+            if (timeoutId) {
+              clearTimeout(timeoutId);
+              timeoutId = null;
+            }
+            clearListeners();
+          }
+
+          function markOpened() {
+            opened = true;
+            cleanup();
+          }
+
+          function onVisibilityChange() {
+            var hidden = document.hidden || document.msHidden || document.webkitHidden;
+            if (hidden) markOpened();
+          }
+
+          function onBlur() {
+            markOpened();
+          }
+
+          function onPageHide() {
+            markOpened();
+          }
+
+          clearListeners = function () {
+            try {
+              if (document.removeEventListener) {
+                document.removeEventListener('visibilitychange', onVisibilityChange, true);
+                document.removeEventListener('msvisibilitychange', onVisibilityChange, true);
+                document.removeEventListener('webkitvisibilitychange', onVisibilityChange, true);
+              }
+              if (window.removeEventListener) {
+                window.removeEventListener('blur', onBlur, true);
+                window.removeEventListener('pagehide', onPageHide, true);
+              }
+            } catch (e) {}
+          };
+
+          try {
+            if (document.addEventListener) {
+              document.addEventListener('visibilitychange', onVisibilityChange, true);
+              document.addEventListener('msvisibilitychange', onVisibilityChange, true);
+              document.addEventListener('webkitvisibilitychange', onVisibilityChange, true);
+            }
+            if (window.addEventListener) {
+              window.addEventListener('blur', onBlur, true);
+              window.addEventListener('pagehide', onPageHide, true);
+            }
+          } catch (e) {}
+
+          timeoutId = setTimeout(function () {
+            if (!opened) {
+              cleanup();
+              window.location.href = fallbackUrl;
+            }
+          }, 1500);
+
+          try {
+            if (schemeUrl.indexOf('intent:') === 0) {
+              window.location.href = schemeUrl;
+              return;
+            }
+
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = schemeUrl;
+            document.body.appendChild(iframe);
+            setTimeout(function () {
+              try {
+                document.body.removeChild(iframe);
+              } catch (e) {}
+            }, 1200);
+          } catch (e) {
+            try {
+              window.location.href = schemeUrl;
+            } catch (e2) {}
+          }
+        }
+
+        var btnEdge = document.getElementById('browserUnsupportedOpenEdge');
+        if (btnEdge) {
+          btnEdge.onclick = function () {
+            var url = window.location.href;
+            tryOpenWithFallback('microsoft-edge:' + url, 'https://www.microsoft.com/edge');
+          };
+        }
+
+        var btnChrome = document.getElementById('browserUnsupportedOpenChrome');
+        if (btnChrome) {
+          btnChrome.onclick = function () {
+            window.location.href = 'https://www.google.cn/chrome/index.html';
+          };
+        }
+      })();
+    </script>
+    <script type="module">
+      if (!window.__LYDC_BROWSER_UNSUPPORTED__) {
+        const fontModuleUrl = '<%= VITE_APP_FONT_URL_LOCAL %>';
+        if (fontModuleUrl && fontModuleUrl !== 'undefined') {
+          import(/* @vite-ignore */ fontModuleUrl)
+            .then(function () {
+              return import('/src/main.ts');
+            })
+            .catch(function () {
+              return import('/src/main.ts');
+            });
+        } else {
+          import('/src/main.ts');
+        }
+      }
+    </script>
+  </body>
+</html>

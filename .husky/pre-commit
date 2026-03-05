@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Format and submit code according to lintstagedrc.js configuration
+npx lint-staged

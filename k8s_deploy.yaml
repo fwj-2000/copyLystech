@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: diecut-app-web
+  namespace: lydc-diecut
+  labels:
+    app: diecut-app-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diecut-app-web
+  template:
+    metadata:
+      labels: 
+        app: diecut-app-web
+    spec:
+      containers: 
+      - name: diecut-app-web
+        image: 10.0.0.55:6001/lydc-web-docker:uat-bc5d2f68
+        ports: 
+        - containerPort: 80
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      imagePullSecrets: 
+      - name: nexus-docker
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: diecut-app-web
+  namespace: lydc-diecut
+  labels:
+    app: diecut-app-web
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: diecut-app-web

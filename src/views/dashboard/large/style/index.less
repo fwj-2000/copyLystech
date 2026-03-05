@@ -1,0 +1,57 @@
+@mainColor: #d6f1fd; // 主要文字颜色
+@navHeight: 190px;
+
+.dashboard-large-page {
+  width: 100%;
+  height: 100%;
+  overflow: auto hidden;
+  color: @mainColor;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .dashboard-large-container {
+    min-width: 3840px;
+    height: 100%;
+
+    .dashboard-large-wrapper {
+      width: 100%;
+      height: 100%;
+      background: #050b23;
+
+      .dashboard-large-nav {
+        height: @navHeight;
+      }
+
+      .content-container {
+        height: calc(100% - @navHeight * 0.5 - 32px);
+        padding: 16px;
+        margin-top: -@navHeight*0.5;
+        background-image: url('../static/banner.png');
+        background-size: auto;
+        background-repeat: no-repeat;
+        background-position: center 0%;
+
+        .content-wrapper {
+          display: grid;
+          grid-gap: 12px;
+          grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          grid-auto-flow: row dense;
+          place-items: stretch center;
+          place-content: center;
+          height: 100%;
+
+          .item {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+          }
+        }
+      }
+    }
+  }
+}

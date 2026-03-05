@@ -1,0 +1,209 @@
+{
+  "code": 200,
+  "msg": "操作成功",
+  "data": [
+    {
+      "machineType": "综合",
+      "achievementRate": 0.936,
+      "below30": 0,
+      "thirtyToSixty": 2,
+      "sixtyToEighty": 19,
+      "above80": 10,
+      "analysList": [
+        {
+          "keys": "用餐休息",
+          "values": 35401.7
+        },
+        {
+          "keys": "模切调机",
+          "values": 27673.3
+        },
+        {
+          "keys": "异常停机",
+          "values": 25397.1
+        },
+        {
+          "keys": "短时停机",
+          "values": 23300.3
+        },
+        {
+          "keys": "换料",
+          "values": 17383.0
+        },
+        {
+          "keys": "其它停机",
+          "values": 9810.2
+        },
+        {
+          "keys": "中途休息",
+          "values": 3553.0
+        },
+        {
+          "keys": "自动化调机",
+          "values": 3003.9
+        },
+        {
+          "keys": "待料",
+          "values": 2524.3
+        },
+        {
+          "keys": "换班",
+          "values": 1832.2
+        },
+        {
+          "keys": "等待停机",
+          "values": 1756.4
+        },
+        {
+          "keys": "待首件",
+          "values": 1483.5
+        },
+        {
+          "keys": "换模具",
+          "values": 863.0
+        },
+        {
+          "keys": "设备维修",
+          "values": 778.1
+        },
+        {
+          "keys": "品质异常",
+          "values": 569.3
+        }
+      ]
+    },
+    {
+      "machineType": "平板",
+      "achievementRate": 0.90,
+      "below30": 0,
+      "thirtyToSixty": 1,
+      "sixtyToEighty": 6,
+      "above80": 3,
+      "analysList": [
+        {
+          "keys": "用餐休息",
+          "values": 21342.7
+        },
+        {
+          "keys": "异常停机",
+          "values": 17745.1
+        },
+        {
+          "keys": "短时停机",
+          "values": 14046.8
+        },
+        {
+          "keys": "模切调机",
+          "values": 11309.0
+        },
+        {
+          "keys": "其它停机",
+          "values": 6988.4
+        },
+        {
+          "keys": "换料",
+          "values": 6645.0
+        },
+        {
+          "keys": "自动化调机",
+          "values": 3003.9
+        },
+        {
+          "keys": "中途休息",
+          "values": 2596.3
+        },
+        {
+          "keys": "待料",
+          "values": 2400.3
+        },
+        {
+          "keys": "等待停机",
+          "values": 1623.3
+        },
+        {
+          "keys": "换班",
+          "values": 1292.7
+        },
+        {
+          "keys": "换模具",
+          "values": 863.0
+        },
+        {
+          "keys": "设备维修",
+          "values": 736.3
+        },
+        {
+          "keys": "待首件",
+          "values": 590.2
+        },
+        {
+          "keys": "品质异常",
+          "values": 2.2
+        }
+      ]
+    },
+    {
+      "machineType": "圆刀",
+      "achievementRate": 0.952,
+      "below30": 0,
+      "thirtyToSixty": 1,
+      "sixtyToEighty": 13,
+      "above80": 7,
+      "analysList": [
+        {
+          "keys": "模切调机",
+          "values": 16364.3
+        },
+        {
+          "keys": "用餐休息",
+          "values": 14059.0
+        },
+        {
+          "keys": "换料",
+          "values": 10738.0
+        },
+        {
+          "keys": "短时停机",
+          "values": 9253.5
+        },
+        {
+          "keys": "异常停机",
+          "values": 7652.0
+        },
+        {
+          "keys": "其它停机",
+          "values": 2821.8
+        },
+        {
+          "keys": "中途休息",
+          "values": 956.7
+        },
+        {
+          "keys": "待首件",
+          "values": 893.3
+        },
+        {
+          "keys": "品质异常",
+          "values": 567.1
+        },
+        {
+          "keys": "换班",
+          "values": 539.5
+        },
+        {
+          "keys": "等待停机",
+          "values": 133.1
+        },
+        {
+          "keys": "待料",
+          "values": 124.0
+        },
+        {
+          "keys": "设备维修",
+          "values": 41.8
+        }
+      ]
+    }
+  ],
+  "timestamp": 1739719719
+}

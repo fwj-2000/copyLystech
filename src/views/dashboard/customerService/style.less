@@ -1,0 +1,114 @@
+@metricContentHeight: 300px;
+@metricContentMinWidth: 320px;
+@metricItemTitleHeight: 44px; // 标题高度
+
+// 首页容器
+.dashboard-fc-full-index-container,
+.dashboard-fc-index-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+
+  .content-container {
+    width: 100%;
+    padding: 0 12px;
+    margin-top: 12px;
+  }
+
+  .metrics-content-container {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    grid-auto-flow: row dense;
+    place-items: stretch center;
+    place-content: center;
+    width: 100%;
+    height: 100%;
+
+    .metric-item {
+      width: 100%;
+      // height: 100%;
+      // min-width: @metricContentMinWidth;
+      height: @metricContentHeight;
+    }
+  }
+}
+
+.dashboard-fc-full-index-container {
+  min-height: 100%;
+}
+
+.dashboard-fc-index-container {
+  height: 100%;
+}
+
+.metric-item-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 -1px 15px 0 rgb(0 0 0 / 5%), 0 6px 15px 0 rgb(0 0 0 / 5%);
+  border-radius: 6px;
+}
+
+.metric-item-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 0 12px 12px;
+
+  .metric-item-title {
+    height: @metricItemTitleHeight;
+    font-size: 15px;
+    color: #333;
+    line-height: @metricItemTitleHeight;
+  }
+
+  .metric-item-content {
+    width: 100%;
+    height: calc(100% - @metricItemTitleHeight);
+  }
+}
+// border样式
+.fc-border-sm {
+  border-radius: 4px;
+  border: 1px solid rgb(219 219 219);
+}
+
+// 切割线条样式
+.fc-split-v {
+  width: 1px;
+  height: 36px;
+  opacity: 0.07;
+  background: #000;
+}
+
+// 阴影样式
+.fc-shadow {
+  border-radius: 3px;
+  box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+}
+
+// 页面基础容器
+.dashboard-fc-page-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden auto;
+  background-color: #fff;
+}
+
+// 通用搜索头部
+.dashboard-common-search-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: #fff;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 5%));
+
+  .search-form {
+    padding: 12px 18px;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

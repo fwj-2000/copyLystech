@@ -1,0 +1,109 @@
+// flex 布局全局样式
+// flex 布局
+.flex-base {
+  display: flex;
+  flex-shrink: 0;
+  &.row {
+    flex-direction: row;
+  }
+  &.column {
+    flex-direction: column;
+  }
+  &.all-start {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  &.item-end {
+    align-items: flex-end;
+  }
+  &.item-start {
+    align-items: flex-start;
+  }
+  &.ct-end {
+    justify-content: flex-end;
+  }
+  &.ct-start {
+    justify-content: flex-start;
+  }
+  &.ct-end {
+    justify-content: flex-end;
+  }
+  &.ct-around {
+    justify-content: space-around;
+  }
+  &.wrap {
+    flex-wrap: wrap;
+  }
+  &.gap-small {
+    gap: 8px;
+  }
+  &.gap-middle {
+    gap: 12px;
+  }
+  &.gap-big {
+    gap: 16px;
+  }
+  &.ct-center {
+    justify-content: center;
+  }
+  &.ct-between {
+    justify-content: space-between;
+  }
+  &.ct-evenly {
+    justify-content: space-evenly;
+  }
+}
+
+.flex {
+  align-items: center;
+  justify-content: center;
+  .flex-base;
+}
+.flex-start {
+  align-items: flex-start;
+  justify-content: flex-start;
+  .flex-base;
+}
+
+// 图标悬浮可点击提示
+.zoom-icon {
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+// 文字悬浮可点击提示
+.text-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+// 文字悬浮可点击提示
+.text-hover {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// 组织结构树形选择器样式
+.org-tree-select-compo {
+  min-width: 120px;
+  text-align: left;
+}
+
+// 加载中样式
+.spin-loading {
+  .ant-spin-nested-loading {
+    width: 100%;
+    height: 100%;
+  }
+  .ant-spin-container {
+    width: 100%;
+    height: 100%;
+  }
+}

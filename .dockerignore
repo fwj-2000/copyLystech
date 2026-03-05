@@ -1,0 +1,44 @@
+# 依赖和构建产物
+node_modules
+dist
+.vite
+.cache
+
+# Git 相关
+.git
+.gitignore
+.gitattributes
+
+# IDE 配置
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境变量
+.env*.local
+.env.development.local
+.env.production.local
+
+# 测试和文档
+tests
+coverage
+*.md
+README.md
+docs
+
+# CI/CD 文件
+.gitlab-ci.yml
+.github
+Jenkinsfile
+
+# 其他
+*.tar.gz
+*.zip

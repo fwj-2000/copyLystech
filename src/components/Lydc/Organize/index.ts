@@ -1,0 +1,25 @@
+import { withInstall } from '/@/utils';
+import OrganizeSelect from './src/OrganizeSelect.vue';
+import OrganizeSelectAsync from './src/OrganizeSelectAsync.vue';
+import DepSelect from './src/DepSelect.vue';
+import DepSelectAsync from './src/DepSelectAsync.vue';
+import PosSelect from './src/PosSelect.vue';
+import GroupSelect from './src/GroupSelect.vue';
+import RoleSelect from './src/RoleSelect.vue';
+import UserSelect from './src/UserSelect.vue';
+import UsersSelect from './src/UsersSelect.vue';
+import FactoryAreaSelect from './src/FactoryAreaSelect.vue';
+import CustomUserSelect from './src/CustomUserSelect.vue';
+import CustomOrganizeSelect from './src/CustomOrganizeSelect.vue';
+
+const isAsync = true;
+export const LydcOrganizeSelect = withInstall(isAsync ? OrganizeSelectAsync : OrganizeSelect);
+export const LydcDepSelect = withInstall(isAsync ? DepSelectAsync : DepSelect);
+export const LydcPosSelect = withInstall(PosSelect);
+export const LydcGroupSelect = withInstall(GroupSelect);
+export const LydcRoleSelect = withInstall(RoleSelect);
+export const LydcUserSelect = withInstall(UserSelect);
+export const LydcUsersSelect = withInstall(UsersSelect);
+export const LydcFactoryAreaSelect = withInstall(FactoryAreaSelect);
+export const LydcCustomUserSelect = withInstall(CustomUserSelect);
+export const LydcCustomOrganizeSelect = withInstall(CustomOrganizeSelect);

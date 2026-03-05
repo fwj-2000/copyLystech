@@ -1,0 +1,21 @@
+.custom-modal {
+  // 1. 覆盖确认框（Modal.success 属于 confirm 类型）的内容区内边距
+  :deep(.ant-modal-confirm .ant-modal-body) {
+    padding: 0;
+  }
+
+  // 2. 调整更新日志容器的内边距
+  :deep(.UpdateCotent-container) {
+    padding: 0;
+  }
+
+  // 3. 调整弹窗内容区的内边距（上 20px，右 0，下 0，左 20px）
+  .ant-modal-content {
+    padding: 20px 0 0 !important;
+  }
+
+  .mainContentBox {
+    // overflow-y: hidden !important;
+    height: 500px;
+  }
+}

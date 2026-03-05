@@ -1,0 +1,12 @@
+import { withInstall } from '/@/utils';
+import basicArrow from './src/BasicArrow.vue';
+import basicTitle from './src/BasicTitle.vue';
+import basicCaption from './src/BasicCaption.vue';
+import basicHelp from './src/BasicHelp.vue';
+import basicPopPage from './src/BasicPopPage.vue';
+
+export const BasicArrow = withInstall(basicArrow);
+export const BasicTitle = withInstall(basicTitle);
+export const BasicCaption = withInstall(basicCaption);
+export const BasicHelp = withInstall(basicHelp);
+export const BasicPopPage = withInstall(basicPopPage);

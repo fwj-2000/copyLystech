@@ -1,0 +1,325 @@
+import {
+  commonTextOption,
+  commonMediumTextOption,
+  commonValueOption,
+  commonMediumFormatValueOption,
+  commonDateOption,
+  getFormatter,
+} from '/@/views/dataAnalysis/components/BaseVxeTable/config';
+import { dimensionCommonFormOptions } from '../../config';
+import { BaseVxeTableTypes, EColumnType } from '/@/views/dataAnalysis/components/BaseVxeTable/types';
+import { TFormItemOption } from '/@/views/dataAnalysis/components/BaseSearchForm/types';
+// 表单配置
+export const formOptions: TFormItemOption[] = [...dimensionCommonFormOptions];
+
+export const getAllColumns = (): BaseVxeTableTypes.Columns => {
+  const columns: BaseVxeTableTypes.Columns = [
+    { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+    // "factory" => "厂区",
+    {
+      ...commonTextOption,
+      title: '厂区',
+      field: 'factory',
+    },
+    // "year" => "年",
+    // "month" => "月",
+    // "week" => "周",
+    // "dayDate" => "过账日期",
+    // "price" => "价格",
+    // "lfimg" => "出货数量",
+    // "chsr" => "出货收入",
+    // "werks" => "出货工厂代码",
+    // "lgort" => "出货库位代码",
+    // "vbelnJ" => "交货单号",
+    // "posnrJ" => "交货单行号",
+    {
+      ...commonTextOption,
+      title: '年',
+      field: 'year',
+    },
+    {
+      ...commonTextOption,
+      title: '月',
+      field: 'month',
+    },
+    {
+      ...commonTextOption,
+      title: '周',
+      field: 'week',
+    },
+    {
+      ...commonDateOption,
+      width: 80,
+      title: '过账日期',
+      field: 'dayDate',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      width: 60,
+      title: '价格',
+      field: 'price',
+      formatter: getFormatter({ decimal: 6 }),
+    },
+    {
+      ...commonMediumFormatValueOption,
+      width: 80,
+      title: '出货数量',
+      field: 'lfimg',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      width: 80,
+      title: '出货收入',
+      field: 'chsr',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '出货工厂代码',
+      field: 'werks',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '出货库位代码',
+      field: 'lgort',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '交货单号',
+      field: 'vbelnJ',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '交货单行号',
+      field: 'posnrJ',
+    },
+    // "vgbel" => "SAP系统订单号",
+    // "vgpos" => "SAP系统订单行号",
+    // "auart" => "订单类型",
+    // "auartT" => "订单类型描述",
+    // "vkorg" => "销售组织",
+    // "vkorgT" => "销售组织名称",
+    // "kunag" => "售达方",
+    // "name101" => "售达方名称",
+    // "kunnrZ5" => "EMS客户编码",
+    // "name1Z5" => "EMS客户名称",
+    // "matnr" => "内部料号",
+    // "zdate" => "拉货日期",
+    {
+      ...commonMediumTextOption,
+      title: 'SAP系统订单号',
+      field: 'vgbel',
+    },
+    {
+      ...commonMediumTextOption,
+      title: 'SAP系统订单行号',
+      field: 'vgpos',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '订单类型',
+      field: 'auart',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '订单类型描述',
+      field: 'auartT',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '销售组织',
+      field: 'vkorg',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '销售组织名称',
+      field: 'vkorgT',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '售达方',
+      field: 'kunag',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '售达方名称',
+      field: 'name101',
+    },
+    {
+      ...commonMediumTextOption,
+      title: 'EMS客户编码',
+      field: 'kunnrZ5',
+    },
+    {
+      ...commonMediumTextOption,
+      title: 'EMS客户名称',
+      field: 'name1Z5',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '内部料号',
+      field: 'matnr',
+    },
+    {
+      ...commonDateOption,
+      title: '拉货日期',
+      field: 'zdate',
+    },
+
+    // "vrkmeOut" => "出货单位",
+    // "mengeMigo" => "公司间收货数量",
+    // "netprN" => "售达单价-未税(原币)",
+    // "pCny" => "售达单价-未税(CNY)",
+    // "waerkEms" => "EMS-交易币别",
+    // "ukursEms" => "EMS-转CNY汇率",
+    // "mwstEmsTx" => "EMS-税率",
+    // "netprEmsN" => "EMS销售单价-未税(原币)",
+    // "pCnyEms" => "EMS销售单价-未税(CNY)",
+    // "kwertEms" => "EMS出货金额-未税(原币)",
+    // "kwertCnyEms" => "EMS出货金额-未税(CNY)",
+    // "zkhxmbh" => "客户项目编号",
+    {
+      ...commonMediumTextOption,
+      title: '出货单位',
+      field: 'vrkmeOut',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      title: '公司间收货数量',
+      field: 'mengeMigo',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      title: '售达单价-未税(原币)',
+      field: 'netprN',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      title: '售达单价-未税(CNY)',
+      field: 'pCny',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      title: 'EMS-交易币别',
+      field: 'waerkEms',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      title: 'EMS-转CNY汇率',
+      field: 'ukursEms',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      title: 'EMS-税率',
+      field: 'mwstEmsTx',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      width: 110,
+      title: 'EMS销售单价-未税(原币)',
+      field: 'netprEmsN',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      width: 110,
+      title: 'EMS销售单价-未税(CNY)',
+      field: 'pCnyEms',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      width: 110,
+      title: 'EMS出货金额-未税(原币)',
+      field: 'kwertEms',
+    },
+    {
+      ...commonMediumFormatValueOption,
+      width: 110,
+      title: 'EMS出货金额-未税(CNY)',
+      field: 'kwertCnyEms',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '客户项目编号',
+      field: 'zkhxmbh',
+    },
+
+    // "zzdkulh" => "终端客户料号",
+    // "zcpgs" => "内部产品线",
+    // "zkhcpm" => "客户产品名",
+    // "z4" => "客服",
+    // "werksTxt" => "出货工厂描述",
+    // "lgobe" => "出货库位描述",
+    // "vmi" => "VMI/非VMI",
+    // "zfygsTxt" => "费用归属描述",
+    // "charg" => "出货批次",
+    // "mtartT" => "产品类型",
+    // "gsber" => "业务范围",
+    // "zfygsGsber" => "费用归属业务范围",
+    // "priceLy" => "单价来源",
+    {
+      ...commonMediumTextOption,
+      title: '终端客户料号',
+      field: 'zzdkulh',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '内部产品线',
+      field: 'zcpgs',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '客户产品名',
+      field: 'zkhcpm',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '客服',
+      field: 'z4',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '出货工厂描述',
+      field: 'werksTxt',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '出货库位描述',
+      field: 'lgobe',
+    },
+    {
+      ...commonMediumTextOption,
+      title: 'VMI/非VMI',
+      field: 'vmi',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '费用归属描述',
+      field: 'zfygsTxt',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '出货批次',
+      field: 'charg',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '产品类型',
+      field: 'mtartT',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '业务范围',
+      field: 'gsber',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '费用归属业务范围',
+      field: 'zfygsGsber',
+    },
+    {
+      ...commonMediumTextOption,
+      title: '单价来源',
+      field: 'priceLy',
+    },
+  ];
+  return columns;
+};

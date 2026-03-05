@@ -1,0 +1,28 @@
+const validColors = ['primary', 'error', 'warning', 'success', 'info', ''] as const;
+type ButtonColorType = (typeof validColors)[number];
+
+export const buttonProps = {
+  align: { type: String, default: 'left' },
+  buttonText: { type: String, default: '' },
+  loading: { type: Boolean },
+  color: {
+    type: String as PropType<ButtonColorType>,
+    validator: v => validColors.includes(v),
+    default: '',
+  },
+  disabled: { type: Boolean },
+  /**
+   * Text before icon.
+   */
+  preIcon: { type: String },
+  /**
+   * Text after icon.
+   */
+  postIcon: { type: String },
+  /**
+   * preIcon and postIcon icon size.
+   * @default: 14
+   */
+  // iconSize: { type: Number, default: 14 },
+  onClick: { type: Function as PropType<(...args) => any>, default: null },
+};

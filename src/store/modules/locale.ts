@@ -1,0 +1,74 @@
+import type { LocaleSetting, LocaleType } from '/#/config';
+
+import { defineStore } from 'pinia';
+import { store } from '/@/store';
+import type { DropMenu } from '/@/components/Dropdown';
+import { LOCALE_KEY } from '/@/enums/cacheEnum';
+import { createLocalStorage } from '/@/utils/cache';
+import { localeSetting } from '/@/settings/localeSetting';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/zh-tw';
+
+const ls = createLocalStorage();
+
+const lsLocaleSetting = (ls.get(LOCALE_KEY) || localeSetting) as LocaleSetting;
+
+interface LocaleState {
+  localInfo: LocaleSetting;
+}
+
+export const useLocaleStore = defineStore({
+  id: 'app-locale',
+  state: (): LocaleState => ({
+    localInfo: lsLocaleSetting,
+  }),
+  getters: {
+    getShowPicker(): boolean {
+      return !!this.localInfo?.showPicker;
+    },
+    getLocale(): LocaleType {
+      return this.localInfo?.locale ?? 'zh_CN';
+    },
+    getTimeZone(): string {
+      const tz = this.localInfo?.timezone ?? 'system';
+      return tz === 'system' ? dayjs.tz.guess() : tz;
+    },
+    getlocalInfoTimeZone(): string {
+      return this.localInfo?.timezone ?? 'system';
+    },
+    getTimezoneList(): DropMenu[] {
+      return this.localInfo?.timezoneList;
+    },
+    getlocaleList(): DropMenu[] {
+      return this.localInfo?.localeList;
+    },
+  },
+  actions: {
+    /**
+     * Set up multilingual information and cache
+     * @param info multilingual info
+     */
+    setLocaleInfo(info: Partial<LocaleSetting>) {
+      this.localInfo = { ...this.localInfo, ...info };
+      console.log('setLocaleInfo.thislocalInfo affter', this.localInfo);
+      ls.set(LOCALE_KEY, this.localInfo);
+    },
+    /**
+     * Initialize multilingual information and load the existing configuration from the local cache
+     */
+    initLocale() {
+      const dayjsLocale = this.getLocale.replace('_', '-').toLocaleLowerCase();
+      dayjs.locale(dayjsLocale);
+      this.setLocaleInfo({
+        ...localeSetting,
+        ...this.localInfo,
+      });
+    },
+  },
+});
+
+// Need to be used outside the setup
+export function useLocaleStoreWithOut() {
+  return useLocaleStore(store);
+}

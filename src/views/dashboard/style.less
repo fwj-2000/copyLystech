@@ -1,0 +1,95 @@
+@metricContentHeight: 300px;
+@metricContentMinWidth: 320px;
+@metricItemTitleHeight: 44px; // 标题高度
+
+// 首页容器
+.dashboard-common-full-index-container,
+.dashboard-common-index-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+
+  .content-container {
+    width: 100%;
+    padding: 0 12px;
+    margin-top: 12px;
+  }
+}
+
+.dashboard-common-full-index-container {
+  min-height: 100%;
+}
+
+.dashboard-common-index-container {
+  height: 100%;
+}
+
+// border样式
+.dashboard-common-border-sm {
+  border-radius: 4px;
+  border: 1px solid rgb(219 219 219);
+}
+
+// 切割线条样式
+.dashboard-common-split-v {
+  width: 1px;
+  height: 36px;
+  opacity: 0.07;
+  background: #000;
+}
+
+// 阴影样式
+.dashboard-common-shadow {
+  border-radius: 3px;
+  box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+}
+
+// 页面基础容器
+.dashboard-common-page-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden auto;
+}
+
+// 通用搜索头部
+.dashboard-common-search-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: #fff;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 5%));
+  margin-bottom: 12px;
+
+  .search-form {
+    padding: 1rem;
+  }
+}
+
+// vxe表格
+.vxe-table {
+  background-color: #fff;
+
+  :deep(.vxe-grid) {
+    padding: 16px;
+
+    .vxe-toolbar {
+      padding: 0;
+      padding-bottom: 16px;
+    }
+
+    .vxe-buttons--wrapper,
+    .vxe-tools--wrapper,
+    .vxe-tools--operate {
+      padding: 0;
+
+      .ant-btn {
+        height: 30px;
+        padding: 4px 12px;
+        line-height: 1;
+      }
+    }
+  }
+}

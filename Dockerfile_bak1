@@ -1,0 +1,9 @@
+FROM nginx:alpine
+
+ENV WORKDIR /home/lydcsoft/lydc-web
+
+COPY dist ${WORKDIR}
+
+COPY conf/default.conf /etc/nginx/conf.d/
+
+EXPOSE 80

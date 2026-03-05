@@ -1,0 +1,60 @@
+// 表格样式覆盖
+.table-style(
+  @borderColor: #f0f0f0,
+  @containerFontSize: 14px,
+  @headFontSize: 14px,
+  @bodyFontSize: 14px,
+  @tdPadding: 4px 8px,
+) {
+  :deep(.ant-table-wrapper) {
+    padding: 0 !important;
+  }
+
+  :deep(.ant-table-container) {
+    font-size: @containerFontSize;
+    border-color: @borderColor !important;
+  }
+
+  :deep(.ant-table-header) {
+    & > table {
+      border-color: @borderColor!important;
+    }
+  }
+
+  :deep(.ant-table-thead > tr) {
+    & > th {
+      font-size: @headFontSize;
+      font-weight: 700;
+      white-space: pre-wrap;
+
+      /* 允许换行 */
+      word-break: break-word;
+
+      /* 自动断词 */
+      text-align: left;
+      border-color: @borderColor !important;
+    }
+  }
+
+  :deep(.ant-table-tbody > tr) {
+    font-size: @bodyFontSize;
+
+    &:first-child {
+      & > td {
+        padding: 0 !important;
+      }
+    }
+
+    & > td {
+      font-size: @bodyFontSize;
+      white-space: pre-wrap;
+
+      /* 允许换行 */
+      word-break: break-word;
+
+      /* 自动断词 */
+      padding: @tdPadding !important;
+      border-color: @borderColor !important;
+    }
+  }
+}

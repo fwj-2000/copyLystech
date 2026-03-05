@@ -1,0 +1,32 @@
+<!-- 操作按钮组 -->
+<template>
+  <!-- 同步数据 -->
+  <a-popconfirm title="确定同步" @confirm="syncData">
+    <a-button type="primary" :loading="syncLoading">同步数据</a-button>
+  </a-popconfirm>
+</template>
+
+<script lang="ts" setup>
+  import { ref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { syncFareManageData } from '/@/api/dataAnalysis/fare';
+
+  const syncLoading = ref<boolean>(false);
+
+  const { createMessage } = useMessage();
+  // 同步数据
+  const syncData = () => {
+    syncLoading.value = true;
+    syncFareManageData()
+      .then(res => {
+        if (res.code === 200) {
+          createMessage.success(res.msg);
+        } else {
+          createMessage.error(res.msg);
+        }
+      })
+      .finally(() => {
+        syncLoading.value = false;
+      });
+  };
+</script>

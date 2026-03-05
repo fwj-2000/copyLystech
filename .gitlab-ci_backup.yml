@@ -1,0 +1,357 @@
+stages:
+  # - dev_install
+  # - dev_web_build
+  - dev_build
+  - clean_work
+  - uat_install
+  - uat_web_build
+  - uat_buildDockerImage
+  - uat_deploy_in_k8s
+  - uat_micro_install
+  - uat_micro_web_build
+  - uat_micro_buildDockerImage
+  - uat_micro_deploy_in_k8s
+  - prod_install
+  - prod_web_build
+  - prod_build_docker_image
+  #- prod_deploy_in_k8s
+
+cache:
+  paths:
+    - "node_modules"
+    - "dist"
+
+variables:
+  image_name: "10.0.0.55:6001/lydc-cloud-web"
+  container_name: "lydc-web-docker"
+  image_full_uat: "$image_name:uat-$CI_COMMIT_SHORT_SHA"
+  image_full_uat_micro: "$image_name:uat-micro-$CI_COMMIT_SHORT_SHA"
+  image_full_prod: "$image_name:prod-$CI_COMMIT_SHORT_SHA"
+
+before_script:
+  - which yarn || YARN_INSTALLED=false
+  - |
+    if command -v yarn &> /dev/null; then export YARN_INSTALLED=true; fi
+
+# 以下是开发环境配置
+# 只有package.json 发生更改时，才触发此阶段
+# dev-install:
+#   stage: dev_install
+#   image: node:22.3.0-bullseye-slim
+#   tags:
+#     - dev_runner
+#   rules:
+#     - changes: 
+#         - package.json
+#       if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"'
+
+#   script:
+#     - echo "开始安装前端项目依赖"
+#     - if [ "$YARN_INSTALLED" != "true" ]; then npm install -g yarn; fi
+#     - yarn config set registry https://registry.npmmirror.com/
+#     - yarn install  # 安装项目依赖
+#     - echo "安装前端项目依赖完成"
+
+# 安装依赖
+# dev-web-build:
+#   stage: dev_web_build
+#   image: node:22.3.0-bullseye-slim
+#   tags:
+#     - dev_runner
+#   only: 
+#     - dev
+#     - web
+#   script:
+#     - echo "开始构建前端项目"
+#     - node --version
+#     - |
+#       if [ "$YARN_INSTALLED" != "true" ]; then 
+#           npm config set registry https://registry.npmmirror.com
+#           npm install -g yarn
+#       fi
+#     - yarn config set registry https://registry.npmmirror.com/
+#     - yarn install  # 安装项目依赖
+#     - yarn run build:dev  # 执行构建命令
+#     - echo "前端项目构建完成"
+
+# 构建阶段
+dev-build:
+  stage: dev_build
+  image: docker
+  only: 
+    - dev
+    - web
+  tags:
+    - dev_runner
+  interruptible: true
+  script:
+    - echo "构建docker镜像"
+    - docker build --build-arg BUILD_COMMAND="yarn build:dev" -t $image_name:dev-$CI_COMMIT_SHORT_SHA .
+    - echo "登录docker镜像私有仓库"
+    - docker login 10.0.0.55:6001 -u $docker_login_username -p $docker_login_pwd
+    - echo "推送镜像到私有仓库"
+    - docker push $image_name:dev-$CI_COMMIT_SHORT_SHA
+    - echo "停止正在运行的容器并移除"
+    - docker ps -a|grep $container_name && docker stop $container_name && docker rm $container_name || echo "not exist"
+    - echo "启动容器"
+    - docker run -d --name $container_name --restart=always -p 8099:80 $image_name:dev-$CI_COMMIT_SHORT_SHA
+
+dev-clean-work:
+  stage: clean_work
+  only: 
+    - dev
+    - web
+  tags:
+    - dev_runner
+  script:
+    - echo "清理工作开始"
+    - echo "寻找镜像并删除镜像"
+    # 获取该镜像名称的所有标签 并逐一删除标签关联的镜像
+    - |
+      # 删除所有版本为 <none> 的镜像
+      dangling_images=$(docker images -f "dangling=true" -q)
+      if [ -n "$dangling_images" ]; then
+        echo "正在删除悬空镜像："
+        echo "$dangling_images"
+        docker rmi $dangling_images || echo "删除悬空镜像失败"
+      else
+        echo "没有悬空镜像"
+      fi
+      
+      # 删除未被运行使用的正常版本镜像
+      if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "$image_name"; then
+        tags=$(docker images --format '{{.Repository}}:{{.Tag}}' | grep "$image_name" | grep -v '<none>') 
+        running_containers_image_tag=$(docker inspect --format='{{.Config.Image}}' $container_name 2>/dev/null || true)
+        echo "正在删除以下的镜像 $image_name:"
+        echo "$tags"
+        # 循环遍历并删除每个标签对应的镜像
+        for tag in $tags
+        do
+          # 检查该镜像是否为正在运行的容器使用的基础镜像
+          echo "$tag"
+          echo "$running_containers_image_tag"
+          if [ "$tag" != "$running_containers_image_tag" ]; then
+            echo "未使用的镜像：$tag"
+            docker rmi $tag
+          fi
+        done
+        echo "Images with all tags of $image_name have been deleted"
+      else
+        echo "镜像名称：$image_name，当前服务器上没有存在属于此名称的任何标签镜像"
+      fi
+
+  
+    
+
+
+# 以下是测试环境配置
+# 只有package.json 发生更改时，才触发此阶段
+# uat-install:
+#   stage: uat_install
+#   image: node:22.3.0-bullseye-slim
+#   tags:
+#     - test_standalone_runner
+#   rules:
+#     - changes: 
+#         - package.json
+#       if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "test"'
+
+#   script:
+#     - echo "开始安装前端项目依赖"
+#     - if [ "$YARN_INSTALLED" != "true" ]; then npm install -g yarn; fi
+#     - yarn config set registry https://registry.npmmirror.com/
+#     - yarn install  # 安装项目依赖
+#     - echo "安装前端项目依赖完成"
+
+# 构建阶段
+# uat-web-build:
+#   stage: uat_web_build
+#   image: node:22.3.0-bullseye-slim
+#   tags:
+#     - test_standalone_runner
+#   only: 
+#     - test
+#   script:
+#     - echo "开始构建前端项目"
+#     - if [ "$YARN_INSTALLED" != "true" ]; then npm install -g yarn; fi
+#     - yarn config set registry https://registry.npmmirror.com/
+#     - yarn install  # 安装项目依赖
+#     - yarn run build:test  # 执行构建命令
+#     - echo "前端项目构建完成"
+
+
+uat-buildDockerImage:
+  stage: uat_buildDockerImage
+  image: 10.0.0.55:6001/docker-with-curl:latest-v1
+  only: 
+    - test
+  tags:
+    - test_env_jenkins_runner
+  interruptible: true
+  script:
+    - echo "构建docker镜像"
+    - docker build --build-arg BUILD_COMMAND="yarn build:test" -t $image_name:uat-$CI_COMMIT_SHORT_SHA .
+    - echo "登录docker镜像私有仓库"
+    - docker login 10.0.0.55:6001 -u $docker_login_username -p $docker_login_pwd
+    - echo "推送镜像到私有仓库"
+    - docker push $image_name:uat-$CI_COMMIT_SHORT_SHA
+    - docker rmi $image_name:uat-$CI_COMMIT_SHORT_SHA
+
+# 部署阶段
+uat-deploy-in-k8s:
+  stage: uat_deploy_in_k8s
+  image: 10.0.0.55:6001/docker-with-curl:latest-v1
+  only: 
+    - test
+  tags:
+    - test_env_jenkins_runner
+  script:
+    # - echo "安装curl"
+    # - sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+    # - apk add curl
+    - echo "更新k8s集群pod镜像"
+    - >
+      curl -X PUT -H "content-type: application/json" -H "Cookie: KuboardUsername=admin; KuboardAccessKey=hzbkryirhxw6.ad3rijdft8kch4h6a7kcsz6netbzis4i" -d '{"kind":"deployments","namespace":"lydc-cloud","name":"lydc-cloud-web","images":{"10.0.0.55:6001/lydc-cloud-web":"'"$image_full_uat"'"}}' "http://10.16.3.120:27080/kuboard-api/cluster/Lydc.Test/kind/CICDApi/admin/resource/updateImageTag"
+    - echo "测试环境CI流程完成"
+
+
+# 以下是测试环境微服务版Web配置
+# 只有package.json 发生更改时，才触发此阶段
+uat-micro-install:
+  stage: uat_micro_install
+  image: node:22.3.0-bullseye-slim
+  tags:
+    - test_env_jenkins_runner
+  rules:
+    - changes: 
+        - package.json
+      if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "test"'
+
+  script:
+    - echo "开始安装前端项目依赖"
+    - if [ "$YARN_INSTALLED" != "true" ]; then npm install -g yarn; fi
+    - yarn config set registry https://registry.npmmirror.com/
+    - yarn install  # 安装项目依赖
+    - echo "安装前端项目依赖完成"
+
+# 构建阶段
+uat-micro-web-build:
+  stage: uat_micro_web_build
+  image: node:22.3.0-bullseye-slim
+  tags:
+    - test_env_jenkins_runner
+  only: 
+    - tags
+  script:
+    - echo "开始构建前端项目"
+    - if [ "$YARN_INSTALLED" != "true" ]; then npm install -g yarn; fi
+    - yarn config set registry https://registry.npmmirror.com/
+    - yarn install  # 安装项目依赖
+    - yarn run build:test-micro  # 执行构建命令
+    - echo "前端项目构建完成"
+
+
+uat-micro-buildDockerImage:
+  stage: uat_micro_buildDockerImage
+  image: 10.0.0.55:6001/docker-with-curl:latest-v1
+  only: 
+    - tags
+  tags:
+    - test_env_jenkins_runner
+  interruptible: true
+  script:
+    - echo "构建docker镜像"
+    - docker build -t $image_name:uat-micro-$CI_COMMIT_SHORT_SHA .
+    - echo "登录docker镜像私有仓库"
+    - docker login 10.0.0.55:6001 -u $docker_login_username -p $docker_login_pwd
+    - echo "推送镜像到私有仓库"
+    - docker push $image_name:uat-micro-$CI_COMMIT_SHORT_SHA
+    - docker rmi $image_name:uat-micro-$CI_COMMIT_SHORT_SHA
+
+# 部署阶段
+uat-micro-deploy-in-k8s:
+  stage: uat_micro_deploy_in_k8s
+  image: 10.0.0.55:6001/docker-with-curl:latest-v1
+  only: 
+    - tags
+  tags:
+    - test_env_jenkins_runner
+  script:
+    # - echo "安装curl"
+    # - sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+    # - apk add curl
+    - echo "更新k8s集群pod镜像"
+    - >
+      curl -X PUT -H "content-type: application/json" -H "Cookie: KuboardUsername=admin; KuboardAccessKey=hzbkryirhxw6.ad3rijdft8kch4h6a7kcsz6netbzis4i" -d '{"kind":"deployments","namespace":"lydc-cloud","name":"lydc-cloud-web","images":{"10.0.0.55:6001/lydc-cloud-web":"'"$image_full_uat_micro"'"}}' "http://10.16.3.120:27080/kuboard-api/cluster/Lydc.Test/kind/CICDApi/admin/resource/updateImageTag"
+    - echo "测试环境CI流程完成"
+
+# 以下是生产环境配置
+# 只有package.json 发生更改时，才触发此阶段
+# prod-install:
+#   stage: prod_install
+#   image: node:22.3.0-bullseye-slim
+#   tags:
+#     - prod_global_runner
+#   rules:
+#     - changes: 
+#         - package.json
+#       if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "release"'
+
+#   script:
+#     - echo "开始安装前端项目依赖"
+#     - if [ "$YARN_INSTALLED" != "true" ]; then npm install -g yarn; fi
+#     - yarn config set registry https://registry.npmmirror.com/
+#     - yarn install  # 安装项目依赖
+#     - echo "安装前端项目依赖完成"
+
+# 安装依赖
+# prod-web-build:
+#   stage: prod_web_build
+#   image: node:22.3.0-bullseye-slim
+#   tags:
+#     - prod_global_runner
+#   only: 
+#     - release
+#   script:
+#     - echo "开始构建前端项目"
+#     - if [ "$YARN_INSTALLED" != "true" ]; then npm install -g yarn; fi
+#     - yarn config set registry https://registry.npmmirror.com/
+#     - yarn install  # 安装项目依赖
+#     - yarn run build  # 执行构建命令
+#     - echo "前端项目构建完成"
+
+# 构建阶段
+
+prod-buildDockerImage:
+  stage: prod_build_docker_image
+  image: docker
+  only: 
+    - release
+  tags:
+    - prod_global_runner_182
+  script:
+    - echo "构建docker镜像"
+    - docker build --build-arg BUILD_COMMAND="yarn build" -t $image_name:prod-$CI_COMMIT_SHORT_SHA .
+    - echo "登录docker镜像私有仓库"
+    - docker login 10.0.0.55:6001 -u $docker_login_username -p $docker_login_pwd
+    - echo "推送镜像到私有仓库"
+    - docker push $image_name:prod-$CI_COMMIT_SHORT_SHA
+    - docker rmi $image_name:prod-$CI_COMMIT_SHORT_SHA
+
+
+# prod-deploy-in-k8s:
+#   stage: prod_deploy_in_k8s
+#   image: docker
+#   only: 
+#     - release
+#   tags:
+#     - prod_global_runner_182
+#   script:
+#     - echo "安装curl"
+#     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+#     - apk add curl
+#     - echo "更新k8s集群pod镜像"
+#     - >
+#       curl -X PUT -H "content-type: application/json" -H "Cookie: KuboardUsername=admin; KuboardAccessKey=ne3x7efdxi6z.ymdjd6j5rd8wfw8ytr7nba5awefieh5f" -d '{"kind":"deployments","namespace":"lydc-cloud","name":"lydc-cloud-web","images":{"10.0.0.55:6001/lydc-cloud-web":"'"$image_full_prod"'"}}' "http://10.0.0.191:27080/kuboard-api/cluster/LYDC-release-cluster/kind/CICDApi/admin/resource/updateImageTag"
+#     - echo "生产环境CI流程完成"
+

@@ -1,0 +1,127 @@
+@prefix-cls: ~'@{namespace}-basic-table';
+
+// fix table unnecessary scrollbar
+.@{prefix-cls} {
+  .hide-scrollbar-y {
+    .ant-spin-nested-loading {
+      .ant-spin-container {
+        .ant-table {
+          .ant-table-container,
+          .ant-table-content {
+            .ant-table-scroll {
+              .ant-table-hide-scrollbar {
+                overflow-y: auto !important;
+              }
+
+              .ant-table-body {
+                overflow-y: auto !important;
+              }
+            }
+            // .ant-table-body {
+            //   overflow-y: auto !important;
+            // }
+
+            .ant-table-fixed-right {
+              .ant-table-body-outer {
+                .ant-table-body-inner {
+                  overflow-y: auto !important;
+                }
+              }
+            }
+
+            .ant-table-fixed-left {
+              .ant-table-body-outer {
+                .ant-table-body-inner {
+                  overflow-y: auto !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .hide-scrollbar-x {
+    .ant-spin-nested-loading {
+      .ant-spin-container {
+        .ant-table {
+          .ant-table-container,
+          .ant-table-content {
+            .ant-table-scroll {
+              .ant-table-hide-scrollbar {
+                //overflow-x: auto !important;
+              }
+
+              .ant-table-body {
+                overflow: auto !important;
+              }
+            }
+
+            .ant-table-fixed-right {
+              .ant-table-body-outer {
+                .ant-table-body-inner {
+                  overflow-x: auto !important;
+                }
+              }
+            }
+
+            .ant-table-fixed-left {
+              .ant-table-body-outer {
+                .ant-table-body-inner {
+                  overflow-x: auto !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ant-table-wrapper .ant-table-header {
+  border-radius: 0 !important;
+}
+
+.ant-table {
+  // padding: 0 10px !important;
+  .ant-table-tbody .ant-table-wrapper .ant-table {
+    margin: 0 !important;
+  }
+
+  .ant-table-placeholder {
+    .ant-table-cell {
+      border-bottom: none !important;
+
+      .ant-table-expanded-row-fixed {
+        &::after {
+          border-right: none !important;
+        }
+      }
+    }
+  }
+
+  &-title {
+    padding: 10px 0 !important;
+  }
+}
+
+html[data-theme='light'] {
+  .ant-table-thead > tr > th {
+    background: linear-gradient(180deg, #ffede5 0%, #fff8f5 100%) !important;
+    border-bottom: 1px solid #f9e8e1 !important;
+    color: @table-header-color !important;
+    font-size: var(--vxe-ui-font-size-small) !important;
+    border-radius: 0 !important;
+  }
+
+  .ant-table-tbody > tr > td {
+    color: @table-content-color !important;
+    // font-family: 'PingFang SC' !important;
+    font-family: var(--vxe-ui-font-family) !important;
+    font-size: var(--vxe-ui-font-size-small) !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+  }
+}

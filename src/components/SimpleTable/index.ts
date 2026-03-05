@@ -1,0 +1,1 @@
+export { default as SimpleTable } from './src/SimpleTable.vue';
